@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G-Threads | Luxury Fashion</title>
+  <style>
+    :root {
+      --primary-color: #0077ff;
+      --accent-color: #c0c0c0;
+      --background-light: #ffffff;
+      --background-dark: #0a0a0a;
+      --text-light: #ffffff;
+      --text-dark: #111111;
+      --shadow: rgba(0, 0, 0, 0.2);
+      --radius: 12px;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: all 0.3s ease;
+      background-color: var(--background-light);
+      color: var(--text-dark);
+    }
+
+    body.dark {
+      background-color: var(--background-dark);
+      color: var(--text-light);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px var(--shadow);
+      background: var(--background-light);
+    }
+
+    body.dark header {
+      background: #111;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .toggle-btn {
+      border: none;
+      background: var(--accent-color);
+      color: #000;
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .toggle-btn:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 1rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      color: #fff;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .product {
+      box-shadow: 0 4px 12px var(--shadow);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--background-light);
+      text-align: center;
+      padding: 1rem;
+      transition: transform 0.3s;
+    }
+
+    body.dark .product {
+      background: #1a1a1a;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+      width: 100%;
+      border-radius: var(--radius);
+    }
+
+    .product h3 {
+      margin: 0.5rem 0;
+    }
+
+    .product button {
+      background: var(--primary-color);
+      border: none;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .product button:hover {
+      background: var(--accent-color);
+      color: #000;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      background: var(--background-light);
+      color: var(--accent-color);
+      box-shadow: 0 -2px 10px var(--shadow);
+    }
+
+    body.dark footer {
+      background: #111;
+    }
+
+    .cart {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--primary-color);
+      color: #fff;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px var(--shadow);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">G-Threads</div>
+    <button class="toggle-btn" onclick="toggleTheme()">🌙 Toggle</button>
+  </header>
+
+  <div class="hero">
+    <h1>Luxury Fashion for Every Style</h1>
+    <p>Discover premium threads designed to make you stand out.</p>
+  </div>
+
+  <div class="products" id="productList">
+    <div class="product">
+      <h3>Classic Tee</h3>
+      <p>$25.00</p>
+      <button onclick="addToCart('Classic Tee', 25)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <h3>Denim Jacket</h3>
+      <p>$60.00</p>
+      <button onclick="addToCart('Denim Jacket', 60)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <h3>Leather Belt</h3>
+      <p>$35.00</p>
+      <button onclick="addToCart('Leather Belt', 35)">Add to Cart</button>
+    </div>
+    <div class="product">
+      <h3>Designer Hat</h3>
+      <p>$40.00</p>
+      <button onclick="addToCart('Designer Hat', 40)">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="cart" onclick="checkout()">🛒</div>
+
+  <footer>Developed by E.A_TheProgrammer777</footer>
+
+  <script>
+    const cart = [];
+    function addToCart(item, price) {
+      cart.push({ item, price });
+      alert(`${item} added to cart!`);
+    }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+      const email = "your@email.com";
+      const subject = encodeURIComponent("New G-Threads Order");
+      const body = cart.map(p => `${p.item} - $${p.price}`).join("%0D%0A");
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+  </script>
+</body>
+</html>

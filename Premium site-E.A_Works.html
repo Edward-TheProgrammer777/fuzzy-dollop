@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thank You Furnitures — Ready to Sell</title>
+<meta name="description" content="Contact the seller via WhatsApp" />
+
+<style>
+/* ==============================
+   THEME + BASE STYLES
+   ============================== */
+:root{
+  --bg:#f7f7fb;--card:#ffffff;--muted:#6b7280;--text:#0f172a;
+  --accent:#7c3aed;--accent-2:#06b6d4;--glass:rgba(255,255,255,0.6);
+  --shadow:0 6px 18px rgba(12,14,20,0.08);
+  --radius:12px;--gap:18px;--watermark:rgba(12,14,20,0.06);
+  --glass-2: rgba(255,255,255,0.04);
+  --brand-gradient: linear-gradient(135deg,var(--accent),var(--accent-2));
+}
+.dark{
+  --bg:#071226;--card:#071a2a;--muted:#9aa6b2;--text:#e6eef7;
+  --accent:#8b5cf6;--accent-2:#06b6d4;--glass:rgba(255,255,255,0.04);
+  --shadow:0 8px 30px rgba(2,6,23,0.6);
+  --watermark:rgba(255,255,255,0.04);
+  --brand-gradient: linear-gradient(135deg,var(--accent),var(--accent-2));
+  --glass-2: rgba(255,255,255,0.02);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+  background:linear-gradient(180deg,var(--bg),#e9f0ff12);
+  color:var(--text);
+  padding:28px;
+  transition:background 0.6s ease,color 0.6s ease;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  overflow-y:overlay;
+}
+
+/* ==============================
+   LAYOUT + NAV
+   ============================== */
+.nav{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;
+  opacity:0;transform:translateY(-20px);animation:slideDownFade .7s ease-out .08s forwards;
+}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{
+  width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;
+  font-weight:800;box-shadow:var(--shadow);
+  background:var(--brand-gradient);transition:box-shadow .45s ease,transform .25s ease,filter .45s ease;
+  transform-origin:center;
+}
+.logo .inner{font-size:14px;letter-spacing:.6px}
+h1{font-size:18px;margin:0}
+.controls{display:flex;gap:8px;align-items:center}
+.btn{
+  background:var(--card);padding:10px 12px;border-radius:10px;box-shadow:var(--shadow);
+  border:1px solid transparent;cursor:pointer;transition:transform .14s ease,box-shadow .14s ease,background .25s ease;
+  position:relative;overflow:hidden;
+}
+.btn:active{transform:translateY(1px)}
+.container{display:grid;grid-template-columns:1fr;gap:24px}
+
+/* ==============================
+   PRODUCT GRID
+   ============================== */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.product{
+  background:linear-gradient(180deg,var(--card),rgba(255,255,255,.02));
+  padding:18px;border-radius:var(--radius);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;
+  border:1px solid rgba(0,0,0,.04);position:relative;overflow:hidden;
+  transition:transform .28s cubic-bezier(.2,.9,.3,1),box-shadow .28s ease,background .4s ease;
+  opacity:0;transform:translateY(24px) scale(0.995);
+  will-change:transform,opacity;
+}
+.product:hover{
+  transform:translateY(-10px) rotateX(1.2deg) scale(1.01);
+  box-shadow:0 20px 40px rgba(2,6,23,0.18);
+}
+.thumb{height:210px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:46px;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.01));position:relative;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;border-radius:8px;display:block;transform-origin:center;transition:transform .6s ease}
+.product:hover .thumb img{transform:scale(1.04)}
+.p-title{font-weight:700;font-size:16px}
+.p-desc{font-size:13px;color:var(--muted);min-height:40px}
+.price{font-weight:800;color:var(--accent);margin-top:6px}
+.product-footer{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.small-stock{font-size:12px}
+.carousel-controls{display:flex;gap:6px;margin-top:8px;justify-content:center}
+.cc-btn{background:transparent;border:1px solid rgba(0,0,0,.06);padding:6px 8px;border-radius:8px;cursor:pointer}
+.owner-controls{position:absolute;top:12px;right:12px;display:flex;gap:8px;opacity:.98}
+.icon-btn{background:var(--card);padding:8px;border-radius:8px;box-shadow:var(--shadow);cursor:pointer;border:1px solid rgba(0,0,0,.04);font-size:13px;transition:transform .12s ease,box-shadow .12s ease}
+.icon-btn:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(2,6,23,0.12)}
+
+/* ==============================
+   ADD MATRIX BUTTON
+   ============================== */
+.add-btn{
+  position:fixed;right:28px;top:90px;background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#fff;padding:12px 16px;border-radius:14px;box-shadow:0 18px 40px rgba(12,14,20,.14);
+  border:none;font-weight:800;cursor:pointer;z-index:60;opacity:0;transform:translateX(30px);
+  animation:slideRightFade .8s ease-out .35s forwards;position:fixed;
+  transition:box-shadow .35s ease,transform .18s ease;
+  overflow:hidden;
+}
+.add-btn:active{transform:translateY(1px)}
+.add-btn:hover{box-shadow:0 24px 60px rgba(12,14,20,.18)}
+
+/* ripple element */
+.ripple{
+  position:absolute;border-radius:50%;transform:scale(0);opacity:0.5;pointer-events:none;
+  animation:rippleAnim .6s ease-out;
+  background:rgba(255,255,255,0.35);
+}
+
+/* ==============================
+   MODAL STYLES
+   ============================== */
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(2,6,23,.5);display:none;align-items:center;justify-content:center;z-index:70;padding:24px;
+  opacity:0;transition:opacity .28s ease;
+}
+.modal{
+  background:var(--card);border-radius:12px;padding:18px;width:100%;max-width:760px;box-shadow:var(--shadow);
+  transform:translateY(-10px);transition:transform .32s cubic-bezier(.2,.9,.3,1),opacity .28s ease,background .4s ease;
+  opacity:0;
+}
+.modal.open{opacity:1;transform:translateY(0)}
+.modal.closing{opacity:0;transform:translateY(-8px)}
+.modal h3{margin:0 0 8px 0}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row-full{display:block;margin-bottom:12px}
+input[type=text],input[type=number],textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,.06);background:transparent;color:var(--text);transition:background .3s ease,color .3s ease,border-color .25s ease}
+textarea{min-height:100px;resize:vertical}
+.files-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.file-card{width:120px;border-radius:8px;padding:8px;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.01));display:flex;flex-direction:column;gap:6px;align-items:center;transition:transform .18s ease,opacity .18s ease}
+.file-card img{width:100%;height:72px;object-fit:cover;border-radius:6px}
+.file-caption{width:100%;padding:6px;border-radius:6px;border:1px solid rgba(0,0,0,.06);font-size:12px}
+
+/* ==============================
+   FOOTER + WATERMARK
+   ============================== */
+footer{margin-top:20px;color:var(--muted);font-size:13px;text-align:center;position:relative;padding-top:24px;transition:color .4s ease;}
+.watermark{
+  position:fixed;right:14px;bottom:10px;color:var(--watermark);font-weight:700;padding:6px 8px;border-radius:6px;background:transparent;pointer-events:none;
+  transform:translateY(0);animation:waterFloat 6s ease-in-out infinite;
+}
+
+/* ==============================
+   RESPONSIVE
+   ============================== */
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.form-row{grid-template-columns:1fr}body{padding:16px}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.nav{flex-direction:column;align-items:flex-start;gap:12px}.add-btn{right:16px;top:80px}}
+
+/* ==============================
+   ANIMATIONS & KEYFRAMES
+   ============================== */
+@keyframes slideDownFade{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideRightFade{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUpNew{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadePulse{0%{opacity:0;transform:scale(.97)}60%{opacity:1;transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
+@keyframes fadeInModal{from{opacity:0}to{opacity:1}}
+@keyframes rippleAnim{from{transform:scale(0);opacity:.45}to{transform:scale(3);opacity:0}}
+@keyframes waterFloat{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+@keyframes glowPulse{0%{box-shadow:0 6px 18px rgba(124,58,237,0.24)}50%{box-shadow:0 20px 50px rgba(124,58,237,0.32)}100%{box-shadow:0 6px 18px rgba(124,58,237,0.24)}}
+@keyframes flashAccent{0%{filter:brightness(1)}40%{filter:brightness(1.08) saturate(1.05)}100%{filter:brightness(1)}}
+
+/* classes tying keyframes */
+.product.new{animation:fadeUpNew .6s ease-out forwards}
+.product.edited{animation:fadePulse .5s ease-out forwards}
+.empty{opacity:0;transform:translateY(20px);animation:fadeUp .8s ease-out .5s forwards}
+.contactBtn{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;padding:10px 12px;border-radius:8px;border:none;font-weight:700;cursor:pointer;transition:box-shadow .25s ease,transform .12s ease}
+.contactBtn:hover{box-shadow:0 12px 36px rgba(6,182,212,0.14);transform:translateY(-4px)}
+
+/* theme-flash: applied briefly on theme toggle */
+.theme-flash .logo{animation:glowPulse .95s ease-in-out both}
+.theme-flash .add-btn{animation:flashAccent .95s ease-in-out both}
+.theme-flash .watermark{animation:waterFloat 1s ease-in-out both}
+
+/* subtle focus outlines for accessibility */
+:focus{outline:3px solid rgba(124,58,237,0.12);outline-offset:3px}
+</style>
+</head>
+
+<body>
+<div class="nav">
+  <div class="brand">
+    <div class="logo" aria-hidden="true"><div class="inner">TYF</div></div>
+    <div>
+      <h1>Thank You Furnitures — Ready to Sell</h1>
+      <div class="muted">Modern, responsive, single-file store · Contact Seller via WhatsApp</div>
+    </div>
+  </div>
+  <div class="controls"><button class="btn" id="themeToggle" aria-pressed="false">🌗 Theme</button></div>
+</div>
+
+<div class="container">
+  <main>
+    <section class="grid" id="productGrid"></section>
+    <div id="emptyState" class="empty" style="display:none">
+      <h2>No products yet</h2>
+      <p class="muted">Click <strong>🧩 Add Matrix Item</strong> to start adding products customers can buy or contact you about.</p>
+    </div>
+    <footer>
+      Built for resale · Add items using the <strong>🧩 Add Matrix Item</strong> button.<br>
+      <h2>© E.A_Works</h2>
+    </footer>
+  </main>
+</div>
+
+<button class="add-btn" id="addBtn">🧩 Add Matrix Item</button>
+<div class="watermark">© E.A_Works</div>
+
+<!-- Modal -->
+<div id="modalBackdrop" class="modal-backdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h3 id="modalTitle">Add Product</h3>
+    <div class="form-row">
+      <div><label>Product Title</label><input id="pTitle" type="text" placeholder="e.g. Leather Chair"></div>
+      <div><label>Price (GHS)</label><input id="pPrice" type="number" placeholder="e.g. 250.00" min="0" step="0.01"></div>
+    </div>
+    <div class="form-row-full"><label>Short Description</label><textarea id="pDesc" placeholder="Add a short, attractive description"></textarea></div>
+    <div class="form-row-full">
+      <label>Choose Images</label><br><input id="pFiles" type="file" accept="image/*" multiple>
+      <div class="files-preview" id="filesPreview"></div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+      <button class="btn" id="cancelBtn">Cancel</button>
+      <button class="btn" id="saveBtn" style="background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<template id="productTpl">
+  <article class="product" role="article">
+    <div class="owner-controls">
+      <button class="icon-btn editBtn" title="Edit">✏️</button>
+      <button class="icon-btn delBtn" title="Delete">🗑️</button>
+    </div>
+    <div class="thumb" aria-hidden="true"></div>
+    <div><div class="p-title"></div><div class="p-desc muted"></div><div class="carousel-controls"></div></div>
+    <div class="product-footer">
+      <div><div class="price"></div><div class="muted small-stock"></div></div>
+      <div><button class="contactBtn">Contact Seller</button></div>
+    </div>
+  </article>
+</template>
+
+<script>
+/* =========================
+   App / Animation JS
+   ========================= */
+
+const SELLER_WHATSAPP_NUMBER='233538840520';
+const STORAGE_KEY='simple_shop_products_v1';
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+
+/* DOM refs */
+const themeToggle=$('#themeToggle');
+const prefersDark=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+const savedTheme=localStorage.getItem('site-theme');
+const grid=$('#productGrid'), tpl=document.getElementById('productTpl'), addBtn=$('#addBtn'),
+      modalBackdrop=$('#modalBackdrop'), cancelBtn=$('#cancelBtn'), saveBtn=$('#saveBtn'),
+      modalTitle=$('#modalTitle'), pTitle=$('#pTitle'), pDesc=$('#pDesc'), pPrice=$('#pPrice'),
+      pFiles=$('#pFiles'), filesPreview=$('#filesPreview'), emptyState=$('#emptyState');
+
+let products=[], editId=null;
+
+/* Apply theme */
+function applyTheme(t){
+  if(t==='dark') document.documentElement.classList.add('dark');
+  else document.documentElement.classList.remove('dark');
+  localStorage.setItem('site-theme', t);
+  themeToggle.setAttribute('aria-pressed', t==='dark'?'true':'false');
+}
+applyTheme(savedTheme || (prefersDark? 'dark':'light'));
+
+/* theme toggle with a small flash animation */
+themeToggle.addEventListener('click', ()=>{
+  const isDark = document.documentElement.classList.toggle('dark');
+  applyTheme(isDark? 'dark' : 'light');
+
+  // brief flash/glow, remove after animation
+  document.documentElement.classList.add('theme-flash');
+  setTimeout(()=> document.documentElement.classList.remove('theme-flash'), 1000);
+});
+
+/* Storage */
+function loadProducts(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    products = raw ? JSON.parse(raw) : [];
+  }catch(e){ products = []; }
+}
+function saveProducts(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(products)); }
+
+/* Render */
+function render(){
+  grid.innerHTML = '';
+  if(!products.length){ emptyState.style.display = 'block'; return; }
+  else emptyState.style.display = 'none';
+
+  products.forEach((p, idx)=>{
+    const el = tpl.content.cloneNode(true);
+    const article = el.querySelector('article');
+    article.dataset.id = p.id;
+
+    const thumb = el.querySelector('.thumb'),
+          titleEl = el.querySelector('.p-title'),
+          descEl = el.querySelector('.p-desc'),
+          priceEl = el.querySelector('.price'),
+          stockEl = el.querySelector('.small-stock'),
+          contactBtn = el.querySelector('.contactBtn'),
+          editBtn = el.querySelector('.editBtn'),
+          delBtn = el.querySelector('.delBtn'),
+          carouselControls = el.querySelector('.carousel-controls');
+
+    titleEl.textContent = p.title;
+    descEl.textContent = p.desc;
+    priceEl.textContent = `GHS ${Number(p.price).toFixed(2)}`;
+    stockEl.textContent = p.available ? 'In stock' : 'Out of stock';
+
+    // images
+    let current = 0;
+    function showImage(i){
+      thumb.innerHTML = '';
+      if(!p.images || !p.images.length){
+        const ph = document.createElement('div');
+        ph.style.width = '100%'; ph.style.height = '100%';
+        ph.style.display='flex'; ph.style.alignItems='center'; ph.style.justifyContent='center';
+        ph.style.fontSize='40px'; ph.textContent = '🛍️';
+        thumb.appendChild(ph);
+      } else {
+        const img = document.createElement('img');
+        img.src = p.images[i].data;
+        img.alt = p.images[i].caption || p.title;
+        thumb.appendChild(img);
+      }
+    }
+    showImage(0);
+
+    if(p.images && p.images.length > 1){
+      const prev = document.createElement('button');
+      prev.className = 'cc-btn'; prev.textContent = '◀';
+      const next = document.createElement('button');
+      next.className = 'cc-btn'; next.textContent = '▶';
+      prev.addEventListener('click', ()=>{ current = (current - 1 + p.images.length) % p.images.length; showImage(current); });
+      next.addEventListener('click', ()=>{ current = (current + 1) % p.images.length; showImage(current); });
+      carouselControls.appendChild(prev); carouselControls.appendChild(next);
+    }
+
+    // contact
+    contactBtn.addEventListener('click', ()=> contactSeller(p));
+
+    // owner actions
+    editBtn.addEventListener('click', ()=> openEditModal(p.id));
+    delBtn.addEventListener('click', ()=>{
+      if(confirm('Delete this product?')){
+        products = products.filter(x => x.id !== p.id);
+        saveProducts(); render();
+      }
+    });
+
+    // staggered appearance delay
+    article.style.animationDelay = `${0.18 + idx * 0.08}s`;
+
+    grid.appendChild(el);
+  });
+}
+
+/* OPEN / CLOSE modals */
+function openModal(){
+  modalBackdrop.style.display = 'flex';
+  // small delay to allow CSS transitions
+  requestAnimationFrame(()=> {
+    modalBackdrop.style.opacity = '1';
+    modalBackdrop.querySelector('.modal').classList.add('open');
+    modalBackdrop.setAttribute('aria-hidden', 'false');
+  });
+}
+function closeModal(){
+  const modal = modalBackdrop.querySelector('.modal');
+  modal.classList.add('closing');
+  modal.classList.remove('open');
+  modalBackdrop.style.opacity = '0';
+  modalBackdrop.setAttribute('aria-hidden', 'true');
+  setTimeout(()=> {
+    modal.classList.remove('closing');
+    modalBackdrop.style.display = 'none';
+  }, 280);
+}
+
+/* ADD / EDIT */
+addBtn.addEventListener('click', ()=> openAddModal());
+function openAddModal(){
+  editId = null;
+  modalTitle.textContent = 'Add Product';
+  pTitle.value = ''; pDesc.value = ''; pPrice.value = ''; pFiles.value = '';
+  filesPreview.innerHTML = '';
+  openModal();
+}
+
+function openEditModal(id){
+  const p = products.find(x => x.id === id);
+  if(!p) return alert('Product not found');
+  editId = id;
+  modalTitle.textContent = 'Edit Product';
+  pTitle.value = p.title; pDesc.value = p.desc; pPrice.value = p.price || '';
+  filesPreview.innerHTML = '';
+  (p.images || []).forEach(img => {
+    const card = createFileCard(img.data, img.caption);
+    const remove = document.createElement('button');
+    remove.textContent = 'Remove'; remove.style.marginTop='6px'; remove.style.padding='6px'; remove.style.fontSize='12px';
+    remove.addEventListener('click', ()=> { card.dataset.remove = '1'; card.style.opacity = '0.5'; });
+    card.appendChild(remove); filesPreview.appendChild(card);
+  });
+  openModal();
+}
+
+/* Cancel/Close */
+cancelBtn.addEventListener('click', ()=> closeModal());
+
+/* FILE PREVIEW & HANDLING */
+pFiles.addEventListener('change', async (e)=>{
+  const files = Array.from(e.target.files || []);
+  for(const f of files){
+    const data = await toDataURL(f);
+    const card = createFileCard(data, '');
+    filesPreview.appendChild(card);
+  }
+  pFiles.value = '';
+});
+
+function createFileCard(dataUrl, caption){
+  const card = document.createElement('div'); card.className = 'file-card';
+  const img = document.createElement('img'); img.src = dataUrl; card.appendChild(img);
+  const cap = document.createElement('input'); cap.className = 'file-caption'; cap.value = caption || ''; cap.placeholder='Image caption (optional)';
+  card.appendChild(cap);
+  return card;
+}
+
+/* SAVE / UPDATE */
+saveBtn.addEventListener('click', async ()=>{
+  const title = pTitle.value.trim(), desc = pDesc.value.trim();
+  const price = Number(pPrice.value) || 0;
+  if(!title) return alert('Please enter a product title');
+
+  const cards = Array.from(filesPreview.querySelectorAll('.file-card'));
+  const images = [];
+  for(const c of cards){
+    if(c.dataset.remove === '1') continue;
+    const img = c.querySelector('img');
+    const cap = c.querySelector('.file-caption');
+    if(img && img.src) images.push({ data: img.src, caption: cap.value || '' });
+  }
+
+  if(editId){
+    const idx = products.findIndex(x => x.id === editId);
+    if(idx === -1) return alert('Could not find product');
+    products[idx].title = title; products[idx].desc = desc; products[idx].price = price; products[idx].images = images;
+    saveProducts(); render();
+    const editedEl = document.querySelector(`[data-id="${editId}"]`);
+    if(editedEl){ editedEl.classList.add('edited'); setTimeout(()=> editedEl.classList.remove('edited'), 650); }
+    closeModal(); return;
+  }
+
+  const id = 'p_' + Date.now().toString(36);
+  const newProduct = { id, title, desc, price, images, available: true, created: Date.now() };
+  products.unshift(newProduct);
+  saveProducts(); render();
+
+  const newest = document.querySelector(`[data-id="${id}"]`);
+  if(newest){ newest.classList.add('new'); setTimeout(()=> newest.classList.remove('new'), 750); }
+  closeModal();
+});
+
+/* CONTACT SELLER */
+function contactSeller(product){
+  const productName = product.title || 'the product';
+  const price = (typeof product.price === 'number') ? `GHS ${product.price.toFixed(2)}` : '';
+  const message = `Hi, I'm interested in ${productName}${ price ? ' for ' + price : '' }. Could we talk about purchasing it?`;
+  const encoded = encodeURIComponent(message);
+  const waLink = `https://wa.me/${SELLER_WHATSAPP_NUMBER}?text=${encoded}`;
+  window.open(waLink, '_blank', 'noopener');
+}
+
+/* UTILITIES */
+function toDataURL(file){
+  return new Promise((res, rej)=>{
+    const fr = new FileReader();
+    fr.onload = ()=> res(fr.result);
+    fr.onerror = rej;
+    fr.readAsDataURL(file);
+  });
+}
+
+/* KEYBOARD ACCESS */
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') {
+    if(modalBackdrop.style.display === 'flex') closeModal();
+  }
+  if(e.key === 'Enter' && modalBackdrop.style.display === 'flex') saveBtn.click();
+});
+
+/* INITIALIZE */
+loadProducts(); render();
+
+/* =========================
+   Micro-interactions: ripple on buttons, and theme flash handler
+   ========================= */
+
+/* ripple generator for clickable elements */
+function makeRipple(e){
+  const target = e.currentTarget;
+  // ignore if the element has pointer-events disabled
+  const rect = target.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 1.2;
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  ripple.style.width = ripple.style.height = size + 'px';
+  const x = e.clientX - rect.left - (size/2);
+  const y = e.clientY - rect.top - (size/2);
+  ripple.style.left = x + 'px';
+  ripple.style.top = y + 'px';
+  target.appendChild(ripple);
+  setTimeout(()=> ripple.remove(), 650);
+}
+
+/* attach ripple to interactive controls using event delegation */
+['click'].forEach(ev=>{
+  document.body.addEventListener(ev, (evt) => {
+    const btn = evt.target.closest('.btn, .add-btn, .contactBtn, .icon-btn, .cc-btn');
+    if(btn) {
+      // only add ripple if element's position is not static
+      const style = window.getComputedStyle(btn);
+      if(style.position === 'static') btn.style.position = 'relative';
+      makeRipple(evt);
+    }
+  }, {passive:true});
+});
+
+/* Extra: gentle accent flash when theme toggles already handled by adding .theme-flash class in theme toggle handler */
+
+/* Accessibility: ensure modal focus trap-ish focus on open (simple) */
+modalBackdrop.addEventListener('transitionend', ()=>{
+  if(modalBackdrop.style.display === 'flex'){
+    const first = modalBackdrop.querySelector('input,textarea,button');
+    if(first) first.focus();
+  }
+});
+
+/* tidy up on page unload */
+window.addEventListener('beforeunload', ()=> { /* nothing heavy, but placeholder if needed */ });
+
+</script>
+</body>
+</html>
